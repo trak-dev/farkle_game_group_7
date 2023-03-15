@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Ladder from "./pages/ladder";
+import Ladder from "./pages/Ladder";
+import Register from "./pages/Register";
 import "./styles/index.scss";
 
 const App = () => {
@@ -9,8 +10,8 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="" element={<Home />} />
-        <Route path="/ladder" element={<Ladder />} />
-        {/* <Route path="*" element={<About />} />  ICI ON PEUT METTRE UNE PAGE 404 PAR EXEMPLE SI L'URL NE CORRESPOND A RIEN DE DECLARER*/}
+        <Route path="/Ladder" element={<Ladder />} />
+        <Route path="/Register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );
