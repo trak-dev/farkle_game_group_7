@@ -11,7 +11,7 @@ const Dicehome = () => {
   // }, []);
 
   return (
-    <div className="">
+    <div className="logOrRegister">
       <ul>
         <NavLink
           to="/register"
@@ -19,6 +19,7 @@ const Dicehome = () => {
         >
           <li>S'INSCRIRE</li>
         </NavLink>
+        <br></br>
         <NavLink
           to="/login"
           className={(nav) => (nav.isActive ? "nav-active" : "")}
