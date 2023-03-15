@@ -1,11 +1,13 @@
 import React from "react";
 import Navigation from "../components/Navigation";
-import Dicehome from "../components/Dicehome";
+import LoginForm from "../components/Loginform";
+// import Dicehome from "../components/Dicehome";
 
 const Login = () => {
   return (
     <div>
       <Navigation />
+      <LoginForm />
     </div>
   );
 };
