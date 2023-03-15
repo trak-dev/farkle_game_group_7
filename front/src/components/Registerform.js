@@ -1,12 +1,26 @@
 import React, { useState } from "react";
 
 const Registerform = ({ db }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
+  const [userinfos, setUserInfos] = useState({
+    username: "",
+    password: "",
+    email: "",
+  });
+
+  const handleonchange = (value, property) => {
+    setUserInfos((oldState) => ({ ...oldState, [property]: value }));
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const { username, password, email } = userinfos;
+
+    const regex = /^\S+@\S+\.\S+$/;
+
+    if (!regex.test(email)) {
+      alert("Adresse mail invalide !");
+      return;
+    }
 
     db.query(
       `INSERT INTO users (username, password, email) VALUES (?, ?)`,
@@ -19,53 +33,28 @@ const Registerform = ({ db }) => {
         }
       }
     );
-
-    const value = event.target.value;
-    const regex = /^\S+@\S+\.\S+$/;
-
-    if (regex.test(value)) {
-      setEmail(value);
-    } else {
-      alert("Adresse mail invalide !");
-      setEmail(alert);
-    }
   };
 
-  //   Pour vérifier que le format de l'email est correct
-  //   function handleEmailChange(event) {
-  //     const value = event.target.value;
-  //     const regex = /^\S+@\S+\.\S+$/;
-
-  //     if (regex.test(value)) {
-  //       setMail(value);
-  //     } else {
-  //       alert("Adresse mail invalide !");
-  //       setMail(alert);
-  //     }
-  //   }
-
   return (
-    <form className="formRegister" onSubmit={handleSubmit}>
+    <form className="formRegister" onSubmit={(event) => handleSubmit(event)}>
       <input
         type="text"
         placeholder="Pseudo"
-        value={username}
-        onChange={(event) => setUsername(event.target.value)}
+        value={userinfos.username}
+        onChange={(event) => handleonchange(event.target.value, "username")}
       />
       <input
-        type="email"
         placeholder="Adresse mail"
-        value={email}
-        onChange={(event) => setEmail(event.target.value)}
-        // onSubmit={handleEmailChange}
+        value={userinfos.email}
+        onChange={(event) => handleonchange(event.target.value, "email")}
       />
       <input
         type="password"
         placeholder="Mot de passe"
-        value={password}
-        onChange={(event) => setPassword(event.target.value)}
+        value={userinfos.password}
+        onChange={(event) => handleonchange(event.target.value, "password")}
       />
-      <button type="submit">S'inscrire</button>
+      <button type="submit"> S'inscrire</button>
     </form>
   );
 };
