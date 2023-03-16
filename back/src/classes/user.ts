@@ -27,4 +27,18 @@ export default class User_Classe {
             throw error;
         }
     }
+
+    static async isUserLoggedIn(token: string) {
+        try {
+            const user = await User_Core.getByToken(token);
+            if (user) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 }

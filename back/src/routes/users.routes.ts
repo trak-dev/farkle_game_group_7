@@ -45,6 +45,18 @@ async function userRoutes(router: FastifyInstance) {
     }
 
   });
+  
+  router.get('/isUserConnected', async (req, reply) => {
+    try {
+      const logged = await User_Classe.isUserLoggedIn(req.headers.authorization! );
+      reply.status(200).send({logged});
+    } catch (error) {
+      console.error(error);
+      reply.status(500).send(error);
+    }
+  
+  });
+  
 }
 
 module.exports = userRoutes
