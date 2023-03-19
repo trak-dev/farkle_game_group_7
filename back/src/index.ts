@@ -3,6 +3,7 @@ import cors from '@fastify/cors'
 import { Sequelize } from 'sequelize-typescript'; 
 import config from './config';
 import user from './models/user.model';
+import game from './models/game.model';
 
 const dbuser = config.database.user;
 const host = config.database.host;
@@ -15,7 +16,7 @@ const sequelize = new Sequelize(database, dbuser, password, {
   host,
   port: portdb,
   dialect: 'postgres',
-  models: [user],  
+  models: [user, game],  
   define: {
     timestamps: false
   },
@@ -54,7 +55,10 @@ router.addHook('onRequest', (request, reply, done) => {
     }
 });
 
+// register the routes
+
 router.register(require('./routes/users.routes'), { prefix: '/users' });
+router.register(require('./routes/games.routes'), { prefix: '/games' });
 
 // start the server
 router.listen({port}, async (err, address) => {

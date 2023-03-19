@@ -7,24 +7,13 @@ interface loginInterface {
     password : string
 };
 
-interface registerInterface {
-    email : string,
-    password : string,
-    pseudo : string
-};
-
 async function userRoutes(router: FastifyInstance) {
 
   router.post<{Body: User}>('/register', async (req, reply) => {
     try {
       if (!req.body || !req.body.email || !req.body.password) throw "Missing parameters";
       const { email, password, pseudo } = req.body;
-      const newUser = new User({
-        email,
-        password,
-        pseudo,
-      });
-      const userTokenAndId = await User_Classe.register(newUser);
+      const userTokenAndId = await User_Classe.register(email, password, pseudo);
       reply.status(200).send(userTokenAndId);
     } catch (error) {
       console.error(error);
