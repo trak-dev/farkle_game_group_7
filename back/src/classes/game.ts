@@ -66,7 +66,6 @@ export default class Game_Classe {
             if (isGameAbleToStart) {
                 await Game_Core.startGame(gameId);
             }
-            // TODO: Send to all players that the game is starting
             return true;
         } catch (error) {
             console.error(error);

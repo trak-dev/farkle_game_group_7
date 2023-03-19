@@ -1,5 +1,8 @@
 import Game from '../models/game.model';
 import GameStatus from '../models/game_status.model';
+import { Server } from "socket.io";
+
+const io = new Server(8090, { /* options */ });
 
 export default class Game_Core {
     
@@ -53,6 +56,11 @@ export default class Game_Core {
         }
     };
 
+    /**
+     * function to count the number of players in a game
+     * @param {number} gameId : The id of the game
+     * @returns {number} PlayerNumber : The number of players in the game
+     */
     static async countPlayers(gameId: number) {
         try {
             const PlayerNumber = await GameStatus.count({
@@ -67,6 +75,13 @@ export default class Game_Core {
         }
     };
 
+    /**
+     * function to add a player to a game and throw an error if the game is full or if the player is already in the game
+     * @param {number} gameId : The id of the game
+     * @param {number} userId : The id of the user
+     * @param {number} dices : The default amount of dices the player has
+     * @returns {GameStatus} newGameStatus : The new game status created
+     */
     static async addPlayer(gameId: number, userId: number, dices: number) {
         try {
             const doesPlayerExist = await GameStatus.findOne({
@@ -82,12 +97,20 @@ export default class Game_Core {
                 dices,
             });
             await newGameStatus.save();
+            return newGameStatus;
         } catch (error) {
             console.error(error);
             throw error;
         }
     };
 
+    /**
+     * function to add to the database that the user is ready to start the game
+     * @date 2023-03-19
+     * @param {number} number : The id of the game
+     * @param {number} userid : The id of the user
+     * @returns {Game} game : The game found
+     */
     static async sendStart(gameId: number, userid : number) {
         try {
             const game = await this.getGameById(gameId);
@@ -115,6 +138,12 @@ export default class Game_Core {
         }
     };
 
+    /**
+     * function to check if the game is able to start
+     * @date 2023-03-19
+     * @param {Game} game : The game to check
+     * @returns {boolean} : The result of the check
+     */
     static async isGameAbleToStart(game: Game) {
         try {
             if (game.current_status !== "waiting") throw "Game already started";
@@ -132,6 +161,12 @@ export default class Game_Core {
         }
     };
 
+    /**
+     * function to start the game and send a socket event to the front
+     * @date 2023-03-19
+     * @param {number} gameId : The id of the game
+     * @returns {void} : Nothing
+     */
     static async startGame(gameId: number) {
         try {
             await Game.update({
@@ -141,9 +176,11 @@ export default class Game_Core {
                     id: gameId
                 }
             });
+            io.emit("game-start", gameId);
+            return;
         } catch (error) {
             console.error(error);
             throw error;
         }
-    }
+    };
 }
