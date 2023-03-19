@@ -49,6 +49,17 @@ async function gameRoutes(router: FastifyInstance) {
         }
     });
 
+    router.get<{Params: {id : string}}>('/start/:id', async (req, reply) => {
+        try {
+            const gameId = parseInt(req.params.id);
+            const userToken = req.headers.authorization;
+            await Game_Classe.sendStart(gameId, userToken);
+            reply.status(200).send("player start sent");
+        } catch (error) {
+            console.error(error);
+            reply.status(500).send(error);
+        }
+    });
     
 }
 

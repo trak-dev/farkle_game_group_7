@@ -57,4 +57,20 @@ export default class Game_Classe {
             throw error;
         }
     }
+
+    static async sendStart(gameId: number, userToken: string) {
+        try {
+            const user = await User_Core.getByToken(userToken);
+            const game = await Game_Core.sendStart(gameId, user.id);
+            const isGameAbleToStart = await Game_Core.isGameAbleToStart(game);
+            if (isGameAbleToStart) {
+                await Game_Core.startGame(gameId);
+            }
+            // TODO: Send to all players that the game is starting
+            return true;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 }
