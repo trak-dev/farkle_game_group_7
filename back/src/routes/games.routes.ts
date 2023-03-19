@@ -16,26 +16,38 @@ async function gameRoutes(router: FastifyInstance) {
         }
       });
 
-      router.get('/', async (req, reply) => {
-        try {
-            const games = await Game_Classe.getAllGames();
-            reply.status(200).send(games);
-        } catch (error) {
-            console.error(error);
-            reply.status(500).send(error);
-        }
-      });
+    router.get('/', async (req, reply) => {
+    try {
+        const games = await Game_Classe.getAllGames();
+        reply.status(200).send(games);
+    } catch (error) {
+        console.error(error);
+        reply.status(500).send(error);
+    }
+    });
 
-      router.get<{Params: {id : string}}>('/:id', async (req, reply) => {
+    router.get<{Params: {id : string}}>('/:id', async (req, reply) => {
+    try {
+        const gameId = parseInt(req.params.id);
+        const game = await Game_Classe.getById(gameId);
+        reply.status(200).send(game);
+    } catch (error) {
+        console.error(error);
+        reply.status(500).send(error);
+    }
+    });
+
+    router.get<{Params: {id : string}}>('/join/:id', async (req, reply) => {
         try {
             const gameId = parseInt(req.params.id);
-            const games = await Game_Classe.getById(gameId);
-            reply.status(200).send(games);
+            const userToken = req.headers.authorization;
+            const gameJoined = await Game_Classe.joinGame(gameId, userToken);
+            reply.status(200).send(gameJoined);
         } catch (error) {
             console.error(error);
             reply.status(500).send(error);
         }
-      });
+    });
 
     
 }

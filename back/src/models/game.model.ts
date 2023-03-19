@@ -1,14 +1,15 @@
 import { Table, Model, Column } from 'sequelize-typescript'
 
-interface UserModel {
+interface GameModel {
     id: number,
-    current_status?: "waiting" | "playing" | "finished",
-    max_players?: number,
-    dices_number?: number,
+    current_status: "waiting" | "playing" | "finished",
+    max_players: number,
+    dices_number: number,
+    players?: number
 }
 
 @Table
-export default class game extends Model<UserModel> {
+export default class game extends Model<GameModel> {
   
   @Column
   declare current_status: "waiting" | "playing" | "finished"
@@ -18,5 +19,7 @@ export default class game extends Model<UserModel> {
 
   @Column
   declare dices_number: number 
+
+  players?: number
   
 }
