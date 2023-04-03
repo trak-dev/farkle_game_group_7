@@ -15,15 +15,15 @@ const Loginform = ({ db }) => {
     event.preventDefault();
     const { email, password } = userinfos;
 
-    // Envoyer les données à la base de données SQL
+    
     axios
       .post("http://127.0.0.1:8080/users/login", { email, password })
       .then((response) => {
         console.log(response);
-        if (response.data.isConnected) {
-          navigate("/Rooms.js");
+        // if (response.data.isConnected) {
+          navigate("../Rooms.js");
           console.log(navigate);
-        }
+        // }
       })
       .catch((error) => {
         console.error("Error inserting user:", error);
