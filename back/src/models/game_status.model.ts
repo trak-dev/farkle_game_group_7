@@ -3,10 +3,11 @@ import { Table, Model, Column, AllowNull } from 'sequelize-typescript'
 interface GameStatusModel {
     user_id: number,
     game_id: number,
-    game_ended: boolean,
     clicked_start: boolean,
-    dices: number,
-    score: number,
+    remaining_dices: number,
+    total_score: number,
+    turn_score: number,
+    is_playing: boolean
 }
 
 @Table
@@ -19,15 +20,18 @@ export default class game_status extends Model<GameStatusModel> {
   declare game_id: number
 
   @Column 
-  declare game_ended: boolean
-
-  @Column 
   declare clicked_start: boolean
 
   @AllowNull(false) @Column 
-  declare dices: number
+  declare remaining_dices: number
 
   @Column
-  declare score: number
+  declare total_score: number
+
+  @Column
+  declare turn_score: number
+
+  @Column
+  declare is_playing: boolean
   
 }

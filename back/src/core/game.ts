@@ -94,7 +94,7 @@ export default class Game_Core {
             const newGameStatus = new GameStatus({
                 game_id: gameId,
                 user_id: userId,
-                dices,
+                remaining_dices: dices,
             });
             await newGameStatus.save();
             return newGameStatus;
