@@ -21,18 +21,16 @@ let DEFAULT_DICES_NB = 6;
 
 // LANCER DE DÉS ET OCCURENCES
 function roll_dice_set(nb_dice_to_roll) {
-    
   const dice_value_occurrence = new Array(NB_DICE_SIDE).fill(0);
-  let dice_index = 0
+  let dice_index = 0;
 
   while (dice_index < nb_dice_to_roll){
     const dice_value = generateRandomInteger(1, NB_DICE_SIDE);
     dice_value_occurrence[dice_value - 1] += 1;
     dice_index += 1;
-
-    console.log(dice_value_occurrence);
-    return dice_value_occurrence
   };
+
+  return dice_value_occurrence;
 };
 
 
