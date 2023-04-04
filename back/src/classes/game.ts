@@ -49,7 +49,6 @@ export default class Game_Classe {
             if (game.current_status !== "waiting") throw "Game already started";
             const playersLength = await Game_Core.countPlayers(gameId);
             if (playersLength >= game.max_players) throw "Game is full";
-            console.log("GameId: " + gameId + " UserId: " + user.id + " Dices: " + game.dices_number, "playersLength: " + playersLength + " max_players: " + game.max_players);
             await Game_Core.addPlayer(gameId, user.id, game.dices_number);
             return true;
         } catch (error) {

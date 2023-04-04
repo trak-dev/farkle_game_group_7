@@ -1,6 +1,7 @@
-import { Table, Model, Column, AllowNull } from 'sequelize-typescript'
+import { Table, Model, Column, AllowNull, PrimaryKey } from 'sequelize-typescript'
 
 interface GameStatusModel {
+    id?: number,
     user_id: number,
     game_id: number,
     clicked_start: boolean,

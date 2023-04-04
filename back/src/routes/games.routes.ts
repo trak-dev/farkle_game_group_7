@@ -2,6 +2,12 @@ import { FastifyInstance } from "fastify";
 import Game from '../models/game.model';
 import Game_Classe from '../classes/game';
 
+interface Turn {
+    replay: boolean,
+    dicesKept: number[],
+    dicesToRoll: number[]
+}
+
 async function gameRoutes(router: FastifyInstance) {
     router.put<{Body: Game}>('/', async (req, reply) => {
         try {
@@ -55,6 +61,18 @@ async function gameRoutes(router: FastifyInstance) {
             const userToken = req.headers.authorization;
             await Game_Classe.sendStart(gameId, userToken);
             reply.status(200).send("player start sent");
+        } catch (error) {
+            console.error(error);
+            reply.status(500).send(error);
+        }
+    });
+
+    router.post<{Params: {id : string}, Body: Turn}>('/play/:id', async (req, reply) => {
+        try {
+            const gameId = parseInt(req.params.id);
+            const userToken = req.headers.authorization;
+            if( !req.body || !req.body.replay || !req.body.dicesKept || !req.body.dicesToRoll ) throw "Invalid turn";
+            const { replay, dicesKept, dicesToRoll } = req.body;
         } catch (error) {
             console.error(error);
             reply.status(500).send(error);

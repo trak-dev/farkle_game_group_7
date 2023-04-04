@@ -10,8 +10,7 @@ interface loginInterface {
 async function userRoutes(router: FastifyInstance) {
   router.post<{ Body: User }>("/register", async (req, reply) => {
     try {
-      if (!req.body || !req.body.email || !req.body.password)
-        throw "Missing parameters";
+      if (!req.body || !req.body.email || !req.body.password || !req.body.pseudo) throw "Missing parameters";
       const { email, password, pseudo } = req.body;
       const userTokenAndId = await User_Classe.register(email, password, pseudo);
       reply.status(200).send(userTokenAndId);

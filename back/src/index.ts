@@ -13,7 +13,6 @@ const database = config.database.name;
 const password = config.database.password;
 const portdb = config.database.port;
 const port = config.port;
-console.log(config);
 
 const sequelize = new Sequelize(database, dbuser, password, {
   host,

@@ -177,6 +177,23 @@ export default class Game_Core {
                 }
             });
             io.emit("game-start", gameId);
+            // configure game start
+            const players = await GameStatus.findAll({
+                where: {
+                    game_id: gameId
+                }
+            });
+            const statusesId = players.map(player => player.id) as number[];
+            // sort the array to have the same order for all players
+            statusesId.sort((a, b) => a - b);
+            await GameStatus.update({
+                is_playing: true
+            }, {
+                where: {
+                    id: statusesId[0]
+                }
+            });
+
             return;
         } catch (error) {
             console.error(error);
