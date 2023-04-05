@@ -1,47 +1,57 @@
-import React, { useState } from 'react';
-import {  useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Loginform = ({ db }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate =  useNavigate();
-
+  const [userinfos, setUserInfos] = useState({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+  const handleonchange = (value, property) => {
+    setUserInfos((oldState) => ({ ...oldState, [property]: value }));
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Envoyer les données à la base de données SQL
-    db.query(
-      `SELECT * FROM users WHERE pseudo = ? AND password = ?`,
-      [username, password],
-      (err, results) => {
-        if (err) {
-          console.error("Erreur de connexion à la base de données:", err);
-        } else {
-          if (results.length > 0) {
-            console.log("Authentification réussie");
-            // Rediriger l'utilisateur vers la page d'accueil
-            navigate('/Rooms')
-          } else {
-            console.error("Nom d'utilisateur ou mot de passe incorrect");
-            // Ajouter le code pour afficher un message d'erreur à l'utilisateur ici
-          }
-        }
-      }
-    );
+    const { email, password } = userinfos;
+
+    axios
+      .post("http://127.0.0.1:8080/users/login", { email, password })
+      .then((response) => {
+        console.log(response);
+        // if (response.data.isConnected) {
+        navigate("../Rooms.js");
+        console.log(navigate);
+        // }
+      })
+      .catch((error) => {
+        console.error("Error inserting user:", error);
+      });
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <label>
-        Pseudo :
-        <input type="text" value={username} onChange={(event) => setUsername(event.target.value)} />
+        Email :
+        <input
+          type="text"
+          value={userinfos.email}
+          onChange={(event) => handleonchange(event.target.value, "email")}
+        />
       </label>
       <label>
         Mot de passe :
-        <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
+        <input
+          type="password"
+          value={userinfos.password}
+          onChange={(event) => handleonchange(event.target.value, "password")}
+        />
       </label>
-      <button type="submit">Se connecter</button>
+      <button onClick={handleSubmit} type="submit">
+        Se connecter
+      </button>
     </form>
   );
-}
+};
 
 export default Loginform;

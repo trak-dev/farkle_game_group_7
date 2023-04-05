@@ -34,7 +34,6 @@ export default class User_Core {
         try {
             const user = await User.findOne({where: {email: email}});
             if (!user) throw "Nom de compte incorrect";
-            console.log(password, user.id)
             const valid = await bcrypt.compare(password, user.password);
             if (!valid) throw "Mot de passe incorrect";
             user.password = "";
@@ -51,7 +50,7 @@ export default class User_Core {
         try {
             const userToken = (await jwt.verify(token, config.jwtSecret)) as JwtPayload;
             const user = await User.findOne({where: {id: userToken.user.id}});
-            if (!user) throw "Utilisateur non trouvé";
+            if (!user) throw "user not found";
             user.password = "";
             return user as User;
         } catch (error) {

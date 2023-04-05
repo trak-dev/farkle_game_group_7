@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const Registerform = ({ db }) => {
   const [userinfos, setUserInfos] = useState({
-    username: "",
+    pseudo: "",
     password: "",
     email: "",
   });
@@ -13,7 +14,7 @@ const Registerform = ({ db }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const { username, password, email } = userinfos;
+    const { pseudo, password, email } = userinfos;
 
     const regex = /^\S+@\S+\.\S+$/;
 
@@ -21,18 +22,14 @@ const Registerform = ({ db }) => {
       alert("Adresse mail invalide !");
       return;
     }
-
-    db.query(
-      `INSERT INTO users (username, password, email) VALUES (?, ?)`,
-      [username, password, email],
-      (err) => {
-        if (err) {
-          console.error("Error inserting user:", err);
-        } else {
-          console.log("User added to database");
-        }
-      }
-    );
+    axios
+      .post("http://127.0.0.1:8080/users/register", { pseudo, email, password })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error("Error inserting user:", error);
+      });
   };
 
   return (
@@ -40,8 +37,8 @@ const Registerform = ({ db }) => {
       <input
         type="text"
         placeholder="Pseudo"
-        value={userinfos.username}
-        onChange={(event) => handleonchange(event.target.value, "username")}
+        value={userinfos.pseudo}
+        onChange={(event) => handleonchange(event.target.value, "pseudo")}
       />
       <input
         placeholder="Adresse mail"
