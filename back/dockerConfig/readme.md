@@ -1,5 +1,6 @@
 how to use this docker file : 
+
 ```sh
 docker compose up -d
-psql -h localhost -U yann farkle_game
+docker exec -it dockerconfig-db-1 psql -U ourGreatUser farkle_game
 ```
