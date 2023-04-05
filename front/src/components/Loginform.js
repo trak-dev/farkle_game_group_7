@@ -11,22 +11,24 @@ const Loginform = ({ db }) => {
   const handleonchange = (value, property) => {
     setUserInfos((oldState) => ({ ...oldState, [property]: value }));
   };
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const { email, password } = userinfos;
-
-    axios
-      .post("http://127.0.0.1:8080/users/login", { email, password })
-      .then((response) => {
-        console.log(response);
-        // if (response.data.isConnected) {
-        navigate("../Rooms.js");
-        console.log(navigate);
-        // }
-      })
-      .catch((error) => {
-        console.error("Error inserting user:", error);
+    try {
+      const { email, password } = userinfos;
+      if (!email || !password) throw "missing properties !";
+      const response = await axios.post("http://127.0.0.1:8080/users/login", {
+        email,
+        password,
       });
+      const token = response.data.token;
+      if (!token) throw "no token !";
+      localStorage.setItem("token", token);
+      console.log("zfeu,nuijaz");
+      navigate("/rooms");
+    } catch (error) {
+      console.error("Error inserting user:", error);
+      // use somethign to make an alert like sweetalert or something else
+    }
   };
 
   return (
